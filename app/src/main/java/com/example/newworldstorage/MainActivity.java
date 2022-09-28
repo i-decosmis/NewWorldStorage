@@ -1,5 +1,6 @@
 package com.example.newworldstorage;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.app.AlertDialog;
@@ -7,11 +8,15 @@ import android.app.ProgressDialog;
 import android.content.Context;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ScrollView;
 import android.widget.TextView;
+import android.widget.Toolbar;
 
 import org.w3c.dom.Text;
 
@@ -67,9 +72,46 @@ public class MainActivity extends AppCompatActivity {
     int index_pressed;
 
     @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.dots, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        switch (item.getItemId()){
+            case R.id.Credits:
+                AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
+
+                // set the title for the alert dialog
+                builder.setTitle("Credits");
+
+                // set the icon for the alert dialog
+                builder.setIcon(R.drawable.treasure);
+
+                builder.setMessage("App icon downloaded from FlatIcon, author: justicon");
+
+                // handle the negative button of the alert dialog
+                builder.setNegativeButton("Chiudi", (dialog, which) -> {});
+
+                // create the builder
+                builder.create();
+
+                // create the alert dialog with the alert dialog builder instance
+                AlertDialog alertDialog = builder.create();
+                alertDialog.show();
+                break;
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
+    @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+
 
         generale = findViewById(R.id.generale);
 
