@@ -324,7 +324,7 @@ public class MainActivity extends AppCompatActivity {
         AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
 
         // set the title for the alert dialog
-        builder.setTitle("Choose Items");
+        builder.setTitle("Scegli classe di oggetti");
 
         // set the icon for the alert dialog
         builder.setIcon(R.drawable.treasure);
@@ -340,30 +340,42 @@ public class MainActivity extends AppCompatActivity {
 
         // handle the positive button of the dialog
         builder.setPositiveButton("Fatto", (dialog, which) -> {
-            List<Integer> index_list = new ArrayList<>();
-            button_pressed.removeAllViews();
-            for (int i = 0; i < checkedItems.length; i++) {
-                if (checkedItems[i]) {
-                    ImageView immagine = aggiungiClasseItem(i);
-                    button_pressed.addView(immagine);
-                    immagine.setScaleY((float) 1.1);
-                    immagine.setScaleX((float) 1.1);
-                    immagine.getLayoutParams().width=160;
-                    immagine.getLayoutParams().height=150;
-                    index_list.add(i);
+            AlertDialog.Builder conferma = new AlertDialog.Builder(MainActivity.this);
+            conferma.setTitle("Conferma selezione");
+            conferma.setPositiveButton("Si",(dialog2,which2) -> {
+                List<Integer> index_list = new ArrayList<>();
+                button_pressed.removeAllViews();
+                for (int i = 0; i < checkedItems.length; i++) {
+                    if (checkedItems[i]) {
+                        ImageView immagine = aggiungiClasseItem(i);
+                        button_pressed.addView(immagine);
+                        immagine.setScaleY((float) 1.1);
+                        immagine.setScaleX((float) 1.1);
+                        immagine.getLayoutParams().width=160;
+                        immagine.getLayoutParams().height=150;
+                        index_list.add(i);
+                    }
                 }
-            }
-            Integer [] index = index_list.toArray(new Integer[index_list.size()]); //converting to array
-            try {
-                salvaSuFile(index);
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-            Arrays.fill(checkedItems, false);
+                Integer [] index = index_list.toArray(new Integer[index_list.size()]); //converting to array
+                try {
+                    salvaSuFile(index);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+                Arrays.fill(checkedItems, false);
+            });
+
+            conferma.setNegativeButton("No", (dialog2,which2) -> {});
+            conferma.create();
+            AlertDialog alertDialog2 = conferma.create();
+            alertDialog2.show();
+
         });
 
+
+
         // handle the negative button of the alert dialog
-        builder.setNegativeButton("Annulla", (dialog, which) -> {});
+        builder.setNegativeButton("Annulla", (dialog, which) -> {Arrays.fill(checkedItems, false);});
 
         // create the builder
         builder.create();
