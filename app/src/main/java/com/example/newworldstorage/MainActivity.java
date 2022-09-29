@@ -7,6 +7,7 @@ import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.os.Bundle;
+import android.os.Handler;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -16,6 +17,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ScrollView;
 import android.widget.TextView;
+import android.widget.Toast;
 import android.widget.Toolbar;
 
 import org.w3c.dom.Text;
@@ -33,6 +35,7 @@ import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+
 
 public class MainActivity extends AppCompatActivity {
     // initialise the list items for the alert dialog
@@ -63,7 +66,7 @@ public class MainActivity extends AppCompatActivity {
         puntabreccia_item,roccafore_della_prodezza_item,scaglia_d_ebano_item,scogliere_della_sciabola_item,
         sopravvento_item,sponda_inquieta_item,ultimo_baluardo_item,valle_del_cordoglio_item};
 
-
+    Toast tst;
     // copy the items from the main list to the selected item list for the preview
     // if the item is checked then only the item should be displayed for the user
     final List<String> selectedItems = Arrays.asList(listItems);
@@ -111,7 +114,7 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-
+        tst = Toast.makeText(this, "This is a toast.", Toast.LENGTH_SHORT);
 
         generale = findViewById(R.id.generale);
 
@@ -347,12 +350,12 @@ public class MainActivity extends AppCompatActivity {
                 button_pressed.removeAllViews();
                 for (int i = 0; i < checkedItems.length; i++) {
                     if (checkedItems[i]) {
-                        ImageView immagine = aggiungiClasseItem(i);
-                        button_pressed.addView(immagine);
-                        immagine.setScaleY((float) 1.1);
-                        immagine.setScaleX((float) 1.1);
-                        immagine.getLayoutParams().width=160;
-                        immagine.getLayoutParams().height=150;
+                        ClassIcon immagine = aggiungiClasseItem(i);
+                        button_pressed.addView(immagine.immagine);
+                        immagine.immagine.setScaleY((float) 1.1);
+                        immagine.immagine.setScaleX((float) 1.1);
+                        immagine.immagine.getLayoutParams().width=160;
+                        immagine.immagine.getLayoutParams().height=150;
                         index_list.add(i);
                     }
                 }
@@ -412,12 +415,12 @@ public class MainActivity extends AppCompatActivity {
                 int i;
                 while((strLine = reader.readLine()) != null) {
                     i = Integer.parseInt(strLine);
-                    ImageView immagine = aggiungiClasseItem(i);
-                    tutti_layout[z].addView(immagine);
-                    immagine.setScaleY((float) 1.1);
-                    immagine.setScaleX((float) 1.1);
-                    immagine.getLayoutParams().width=160;
-                    immagine.getLayoutParams().height=150;
+                    ClassIcon immagine = aggiungiClasseItem(i);
+                    tutti_layout[z].addView(immagine.immagine);
+                    immagine.immagine.setScaleY((float) 1.1);
+                    immagine.immagine.setScaleX((float) 1.1);
+                    immagine.immagine.getLayoutParams().width=160;
+                    immagine.immagine.getLayoutParams().height=150;
                 }
                 reader.close();
             }
@@ -425,71 +428,107 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    ImageView aggiungiClasseItem(int pos){
-        ImageView imageView = new ImageView(this);
+    ClassIcon aggiungiClasseItem(int pos){
+        ClassIcon imageView = new ClassIcon();
+        imageView.immagine = new ImageView(this);
         if (pos == 0){
-            imageView.setImageResource(R.drawable.armi);
+            imageView.immagine.setImageResource(R.drawable.armi);
+            imageView.nome = "Armi";
         }
         if (pos == 1){
-            imageView.setImageResource(R.drawable.arredamento);
+            imageView.immagine.setImageResource(R.drawable.arredamento);
+            imageView.nome = "Arredamento";
         }
         if (pos == 2){
-            imageView.setImageResource(R.drawable.arti_arcane);
+            imageView.immagine.setImageResource(R.drawable.arti_arcane);
+            imageView.nome = "Arti arcane";
         }
         if (pos == 3){
-            imageView.setImageResource(R.drawable.creazione_di_gioielli);
+            imageView.immagine.setImageResource(R.drawable.creazione_di_gioielli);
+            imageView.nome = "Creazione di gioielli";
         }
         if (pos == 4){
-            imageView.setImageResource(R.drawable.cucina);
+            imageView.immagine.setImageResource(R.drawable.cucina);
+            imageView.nome = "Cucina";
         }
         if (pos == 5){
-            imageView.setImageResource(R.drawable.falegnameria);
+            imageView.immagine.setImageResource(R.drawable.falegnameria);
+            imageView.nome = "Falegnameria";
         }
         if (pos == 6){
-            imageView.setImageResource(R.drawable.fonderia);
+            imageView.immagine.setImageResource(R.drawable.fonderia);
+            imageView.nome = "Fonderia";
         }
         if (pos == 7){
-            imageView.setImageResource(R.drawable.lavorazione_del_cuoio);
+            imageView.immagine.setImageResource(R.drawable.lavorazione_del_cuoio);
+            imageView.nome = "Lavorazione del cuoio";
         }
         if (pos == 8){
-            imageView.setImageResource(R.drawable.modificatori);
+            imageView.immagine.setImageResource(R.drawable.modificatori);
+            imageView.nome = "Modificatori";
         }
         if (pos == 9){
-            imageView.setImageResource(R.drawable.munizioni);
+            imageView.immagine.setImageResource(R.drawable.munizioni);
+            imageView.nome = "Munizioni";
         }
         if (pos == 10){
-            imageView.setImageResource(R.drawable.oggetti_utili);
+            imageView.immagine.setImageResource(R.drawable.oggetti_utili);
+            imageView.nome = "Oggetti utili";
         }
         if (pos == 11){
-            imageView.setImageResource(R.drawable.pesca);
+            imageView.immagine.setImageResource(R.drawable.pesca);
+            imageView.nome = "Pesca";
         }
         if (pos == 12){
-            imageView.setImageResource(R.drawable.reagenti);
+            imageView.immagine.setImageResource(R.drawable.reagenti);
+            imageView.nome = "Reagenti";
         }
         if (pos == 13){
-            imageView.setImageResource(R.drawable.ricompense);
+            imageView.immagine.setImageResource(R.drawable.ricompense);
+            imageView.nome = "Ricompense";
         }
         if (pos == 14){
-            imageView.setImageResource(R.drawable.risorse);
+            imageView.immagine.setImageResource(R.drawable.risorse);
+            imageView.nome = "Risorse";
         }
         if (pos == 15){
-            imageView.setImageResource(R.drawable.sfere_da_accordatura);
+            imageView.immagine.setImageResource(R.drawable.sfere_da_accordatura);
+            imageView.nome = "Sfere da accordatura";
         }
         if (pos == 16){
-            imageView.setImageResource(R.drawable.strumenti);
+            imageView.immagine.setImageResource(R.drawable.strumenti);
+            imageView.nome = "Strumenti";
         }
         if (pos == 17){
-            imageView.setImageResource(R.drawable.taglio_della_pietra);
+            imageView.immagine.setImageResource(R.drawable.taglio_della_pietra);
+            imageView.nome = "Taglio della pietra";
         }
         if (pos == 18){
-            imageView.setImageResource(R.drawable.tessitura);
+            imageView.immagine.setImageResource(R.drawable.tessitura);
+            imageView.nome = "Tessitura";
         }
         if (pos == 19){
-            imageView.setImageResource(R.drawable.tinte);
+            imageView.immagine.setImageResource(R.drawable.tinte);
+            imageView.nome = "Tinte";
         }
         if (pos == 20){
-            imageView.setImageResource(R.drawable.vestiario);
+            imageView.immagine.setImageResource(R.drawable.vestiario);
+            imageView.nome = "Vestiario";
         }
+        imageView.immagine.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Handler handler = new Handler();
+                handler.postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        tst.cancel();
+                        tst.setText(imageView.nome);
+                        tst.show();
+                    }
+                }, 500);
+            }
+        });
         return imageView;
     }
 }
