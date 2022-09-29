@@ -518,15 +518,11 @@ public class MainActivity extends AppCompatActivity {
         imageView.immagine.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Handler handler = new Handler();
-                handler.postDelayed(new Runnable() {
-                    @Override
-                    public void run() {
-                        tst.cancel();
-                        tst.setText(imageView.nome);
-                        tst.show();
-                    }
-                }, 500);
+                if (tst != null){
+                    tst.cancel();
+                }
+                tst = Toast.makeText(getApplicationContext(), imageView.nome, Toast.LENGTH_SHORT);
+                tst.show();
             }
         });
         return imageView;
